@@ -61,22 +61,34 @@
             <h2>Available Stocks</h2>
             <ul id="stock-list">
                 <li data-stock="LennonMart" data-price="100" class="stock-item">
-                    LennonMart - <span class="price">100 Diamonds</span> <button class="buy-btn">Buy</button>
+                    LennonMart - <span class="price">100 Diamonds</span> 
+                    <input type="number" class="quantity" value="1" min="1">
+                    <button class="buy-btn">Buy</button>
                 </li>
                 <li data-stock="Lennon Goods and Services" data-price="200" class="stock-item">
-                    Lennon Goods and Services - <span class="price">200 Diamonds</span> <button class="buy-btn">Buy</button>
+                    Lennon Goods and Services - <span class="price">200 Diamonds</span> 
+                    <input type="number" class="quantity" value="1" min="1">
+                    <button class="buy-btn">Buy</button>
                 </li>
                 <li data-stock="Meme Station" data-price="150" class="stock-item">
-                    Meme Station - <span class="price">150 Emeralds</span> <button class="buy-btn">Buy</button>
+                    Meme Station - <span class="price">150 Emeralds</span> 
+                    <input type="number" class="quantity" value="1" min="1">
+                    <button class="buy-btn">Buy</button>
                 </li>
                 <li data-stock="Memesmith" data-price="250" class="stock-item">
-                    Memesmith - <span class="price">250 Emeralds</span> <button class="buy-btn">Buy</button>
+                    Memesmith - <span class="price">250 Emeralds</span>
+                    <input type="number" class="quantity" value="1" min="1">
+                    <button class="buy-btn">Buy</button>
                 </li>
                 <li data-stock="Meme's Car Rentals" data-price="300" class="stock-item">
-                    Meme's Car Rentals - <span class="price">300 Diamonds</span> <button class="buy-btn">Buy</button>
+                    Meme's Car Rentals - <span class="price">300 Diamonds</span>
+                    <input type="number" class="quantity" value="1" min="1">
+                    <button class="buy-btn">Buy</button>
                 </li>
                 <li data-stock="Meme Hospital" data-price="500" class="stock-item">
-                    Meme Hospital - <span class="price">500 Emeralds</span> <button class="buy-btn">Buy</button>
+                    Meme Hospital - <span class="price">500 Emeralds</span>
+                    <input type="number" class="quantity" value="1" min="1">
+                    <button class="buy-btn">Buy</button>
                 </li>
             </ul>
         </section>
@@ -119,17 +131,19 @@
     
     <script>
         $(document).ready(function() {
+            let userCurrency = 1000;  // Starting currency (diamonds or emeralds)
+            let portfolio = JSON.parse(localStorage.getItem('portfolio')) || {};
+            
             // Check if user is logged in when the page loads
             if(localStorage.getItem('username')) {
                 $('#user-info').text('Logged in as ' + localStorage.getItem('username'));
                 $('#logout-btn').show();
                 $('#login-btn').hide();
             }
-
-            // Load saved portfolio from localStorage
-            let portfolio = JSON.parse(localStorage.getItem('portfolio')) || {};
+            
+            // Update portfolio list
             updatePortfolioList(portfolio);
-
+            
             // Toggle Sign Up form
             $('#signup-btn').click(function() {
                 $('#signup-form').toggle();
@@ -176,39 +190,21 @@
                 var stockItem = $(this).closest('.stock-item');
                 var stockName = stockItem.data('stock');
                 var stockPrice = stockItem.data('price');
+                var quantity = parseInt(stockItem.find('.quantity').val()); // Get the quantity to buy
 
-                // Ensure user has enough "currency" (for simplicity, let's assume 1000 currency)
-                var userCurrency = 1000;  // You can replace this with dynamic data for the user
+                // Check if the user has enough funds
+                if (userCurrency >= stockPrice * quantity) {
+                    // Deduct currency
+                    userCurrency -= stockPrice * quantity;
+                    alert('You bought ' + quantity + ' shares of ' + stockName + ' for ' + (stockPrice * quantity) + ' diamonds/emeralds.');
 
-                if (userCurrency >= stockPrice) {
                     // Update portfolio
                     if (!portfolio[stockName]) {
                         portfolio[stockName] = 0;
                     }
-                    portfolio[stockName] += 1;
+                    portfolio[stockName] += quantity;
 
-                    // Save portfolio to localStorage
+                    // Save portfolio and user currency to localStorage
                     localStorage.setItem('portfolio', JSON.stringify(portfolio));
                     updatePortfolioList(portfolio);
-                } else {
-                    alert('Not enough funds to buy ' + stockName);
-                }
-            });
-
-            // Function to update portfolio list
-            function updatePortfolioList(portfolio) {
-                var portfolioList = $('#portfolio-list');
-                portfolioList.empty();
-
-                if (Object.keys(portfolio).length === 0) {
-                    portfolioList.append('<li>No stocks purchased yet.</li>');
-                } else {
-                    for (var stock in portfolio) {
-                        portfolioList.append('<li>' + stock + ': ' + portfolio[stock] + ' shares</li>');
-                    }
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+                    // Update
