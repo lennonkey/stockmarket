@@ -1,7 +1,7 @@
-/* General Styles */
+/* Basic styling */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #f8f8f8;
     margin: 0;
     padding: 0;
 }
@@ -9,23 +9,38 @@ body {
 header {
     background-color: #333;
     color: white;
-    padding: 15px 30px;
+    padding: 10px;
     text-align: center;
 }
 
-h1 {
+nav {
+    background-color: #444;
+    padding: 10px;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
     margin: 0;
 }
 
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
 button {
+    padding: 10px 20px;
     background-color: #28a745;
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 16px;
     cursor: pointer;
-    border-radius: 5px;
-    margin-right: 10px;
 }
 
 button:hover {
@@ -33,109 +48,28 @@ button:hover {
 }
 
 main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
+    padding: 20px;
 }
 
 .card {
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 10px 0;
     padding: 20px;
-    width: 80%;
-    max-width: 600px;
-}
-
-#market ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-#market li {
-    background-color: #f9f9f9;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.price {
-    font-weight: bold;
-}
-
-#portfolio-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-#portfolio-list li {
-    background-color: #f9f9f9;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 footer {
     background-color: #333;
     color: white;
-    padding: 10px;
     text-align: center;
-    margin-top: 30px;
-}
-
-.btn {
-    font-size: 16px;
-    padding: 10px 15px;
-    cursor: pointer;
-    border: none;
-    background-color: #28a745;
-    color: white;
-    border-radius: 5px;
-}
-
-.btn:hover {
-    background-color: #218838;
-}
-
-/* Form Styling */
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-form label {
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-form input {
     padding: 10px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
 }
 
-form button {
-    margin-top: 15px;
-    background-color: #007bff;
+#stock-list li {
+    margin-bottom: 10px;
 }
 
-form button:hover {
-    background-color: #0056b3;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-    main {
-        width: 90%;
-    }
-
-    .card {
-        width: 100%;
-    }
+#portfolio-list li {
+    margin-bottom: 10px;
 }
