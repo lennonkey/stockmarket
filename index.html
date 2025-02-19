@@ -107,6 +107,13 @@
     
     <script>
         $(document).ready(function() {
+            // Check if user is logged in when the page loads
+            if(localStorage.getItem('username')) {
+                $('#user-info').text('Logged in as ' + localStorage.getItem('username'));
+                $('#logout-btn').show();
+                $('#login-btn').hide();
+            }
+
             // Toggle Sign Up form
             $('#signup-btn').click(function() {
                 $('#signup-form').toggle();
@@ -119,17 +126,21 @@
                 $('#signup-form').hide(); // Hide Sign Up form if it's visible
             });
 
-            // Handle login form submission (simple demonstration)
+            // Handle login form submission
             $('#login-form-element').submit(function(e) {
                 e.preventDefault();
                 var username = $('#login-username').val();
                 var password = $('#login-password').val();
 
-                // Check if login is successful (this is just a basic check, modify as needed)
+                // Simulate checking credentials (you would check against a database in a real app)
                 if (username && password) {
+                    // Store the username in localStorage
+                    localStorage.setItem('username', username);
+
                     $('#user-info').text('Logged in as ' + username);
                     $('#login-form').hide();
                     $('#logout-btn').show();
+                    $('#login-btn').hide();
                 } else {
                     alert('Please enter both username and password.');
                 }
@@ -137,8 +148,10 @@
 
             // Handle logout functionality
             $('#logout-btn').click(function() {
+                localStorage.removeItem('username'); // Remove from localStorage
                 $('#user-info').text('Not logged in');
                 $('#logout-btn').hide();
+                $('#login-btn').show();
             });
         });
     </script>
