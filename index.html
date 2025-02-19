@@ -1,176 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Stock Market with Crypto</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-    <header>
-        <h1>Business Stock Market with Crypto</h1>
-        <button id="login-btn" class="btn">Login</button>
-        <button id="signup-btn" class="btn">Sign Up</button>
-    </header>
+$(document).ready(function() {
+    // Initial setup: Starting balance and diamond earning rate
+    var startingDiamonds = 500;
+    var earningRate = 5; // Earn 5 diamonds per interval
+    var earningInterval = 1000; // 1 second interval for earning diamonds
 
-    <nav>
-        <ul>
-            <li><a href="#market">Market</a></li>
-            <li><a href="#portfolio">Portfolio</a></li>
-            <li><a href="#account">Account</a></li>
-            <li><a href="#crypto">Crypto</a></li>
-        </ul>
-    </nav>
+    // Check if user is logged in when the page loads
+    if (localStorage.getItem('username')) {
+        $('#user-info').text('Logged in as ' + localStorage.getItem('username'));
+        $('#logout-btn').show();
+        $('#login-btn').hide();
+        updateDiamondBalance();
+        updateCryptoBalance();
+    }
 
-    <main>
-        <!-- Sign Up Form -->
-        <section id="signup-form" class="card" style="display: none;">
-            <h2>Sign Up</h2>
-            <form id="signup-form-element">
-                <label for="signup-username">Username:</label>
-                <input type="text" id="signup-username" name="signup-username" required>
-                
-                <label for="signup-password">Password:</label>
-                <input type="password" id="signup-password" name="signup-password" required>
-                
-                <button type="submit" class="btn">Create Account</button>
-            </form>
-        </section>
+    // Toggle Sign Up form
+    $('#signup-btn').click(function() {
+        $('#signup-form').toggle();
+        $('#login-form').hide(); // Hide Login form if it's visible
+    });
 
-        <!-- Login Form -->
-        <section id="login-form" class="card" style="display: none;">
-            <h2>Login</h2>
-            <form id="login-form-element">
-                <label for="login-username">Username:</label>
-                <input type="text" id="login-username" name="login-username" required>
-                
-                <label for="login-password">Password:</label>
-                <input type="password" id="login-password" name="login-password" required>
-                
-                <button type="submit" class="btn">Login</button>
-            </form>
-        </section>
+    // Toggle Login form
+    $('#login-btn').click(function() {
+        $('#login-form').toggle();
+        $('#signup-form').hide(); // Hide Sign Up form if it's visible
+    });
 
-        <!-- Market Section -->
-        <section id="market" class="card">
-            <h2>Available Stocks</h2>
-            <ul id="stock-list">
-                <li data-stock="LennonMart" class="stock-item">LennonMart - <span class="price">100 Diamonds</span> - <span class="percentage">100%</span> available <button class="buy-btn">Buy</button></li>
-                <li data-stock="Lennon Goods and Services" class="stock-item">Lennon Goods and Services - <span class="price">200 Diamonds</span> - <span class="percentage">100%</span> available <button class="buy-btn">Buy</button></li>
-                <li data-stock="Meme Station" class="stock-item">Meme Station - <span class="price">150 Emeralds</span> - <span class="percentage">100%</span> available <button class="buy-btn">Buy</button></li>
-                <li data-stock="Memesmith" class="stock-item">Memesmith - <span class="price">250 Emeralds</span> - <span class="percentage">100%</span> available <button class="buy-btn">Buy</button></li>
-                <li data-stock="Meme's Car Rentals" class="stock-item">Meme's Car Rentals - <span class="price">300 Diamonds</span> - <span class="percentage">100%</span> available <button class="buy-btn">Buy</button></li>
-                <li data-stock="Meme Hospital" class="stock-item">Meme Hospital - <span class="price">500 Emeralds</span> - <span class="percentage">100%</span> available <button class="buy-btn">Buy</button></li>
-            </ul>
-        </section>
+    // Handle login form submission
+    $('#login-form-element').submit(function(e) {
+        e.preventDefault();
+        var username = $('#login-username').val();
+        var password = $('#login-password').val();
 
-        <!-- Crypto Section -->
-        <section id="crypto" class="card">
-            <h2>Cryptocurrency</h2>
-            <ul id="crypto-list">
-                <li data-crypto="LennonMartCoin" class="crypto-item">LennonMartCoin - 1 LennonMartCoin = 100 Diamonds <button class="buy-crypto-btn">Buy</button></li>
-                <li data-crypto="LennonGoodsCoin" class="crypto-item">LennonGoodsCoin - 1 LennonGoodsCoin = 150 Diamonds <button class="buy-crypto-btn">Buy</button></li>
-                <li data-crypto="MemeStationCoin" class="crypto-item">MemeStationCoin - 1 MemeStationCoin = 200 Diamonds <button class="buy-crypto-btn">Buy</button></li>
-                <li data-crypto="MemesmithCoin" class="crypto-item">MemesmithCoin - 1 MemesmithCoin = 250 Diamonds <button class="buy-crypto-btn">Buy</button></li>
-                <li data-crypto="MemesCarRentalsCoin" class="crypto-item">MemesCarRentalsCoin - 1 MemesCarRentalsCoin = 300 Diamonds <button class="buy-crypto-btn">Buy</button></li>
-                <li data-crypto="MemeHospitalCoin" class="crypto-item">MemeHospitalCoin - 1 MemeHospitalCoin = 500 Diamonds <button class="buy-crypto-btn">Buy</button></li>
-            </ul>
-        </section>
+        var storedUsername = localStorage.getItem('username');
+        var storedPassword = localStorage.getItem('password');
 
-        <!-- Portfolio Section -->
-        <section id="portfolio" class="card">
-            <h2>Your Portfolio</h2>
-            <ul id="portfolio-list">
-                <li>No stocks purchased yet.</li>
-            </ul>
-        </section>
+        // Check if the username and password match
+        if (username === storedUsername && password === storedPassword) {
+            // Successfully logged in
+            $('#user-info').text('Logged in as ' + username);
+            $('#login-form').hide();
+            $('#logout-btn').show();
+            $('#login-btn').hide();
+            updateDiamondBalance();
+            updateCryptoBalance();
+        } else {
+            alert('Invalid username or password.');
+        }
+    });
 
-        <!-- Account Information Section -->
-        <section id="account" class="card">
-            <h2>Account Information</h2>
-            <p id="user-info">Not logged in</p>
-            <p id="diamond-balance">Diamonds: 0</p>
-            <p id="crypto-balance">Crypto: LennonMartCoin 0, LennonGoodsCoin 0, MemeStationCoin 0, MemesmithCoin 0, MemesCarRentalsCoin 0, MemeHospitalCoin 0</p>
-            <button id="logout-btn" class="btn" style="display: none;">Logout</button>
-        </section>
-    </main>
+    // Handle sign-up form submission
+    $('#signup-form-element').submit(function(e) {
+        e.preventDefault();
+        var username = $('#signup-username').val();
+        var password = $('#signup-password').val();
 
-    <footer>
-        <p>&copy; 2025 Business Stock Market with Crypto. All rights reserved.</p>
-    </footer>
+        // Check if username already exists
+        if (localStorage.getItem('username')) {
+            alert('Account already exists. Please log in.');
+            return;
+        }
 
-    <script>
-        $(document).ready(function() {
-            // Initial setup: Starting balance and diamond earning rate
-            var startingDiamonds = 500;
-            var earningRate = 5; // Earn 5 diamonds per interval
-            var earningInterval = 1000; // 1 second interval for earning diamonds
+        if (username && password) {
+            // Store the username and password in localStorage
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password);
+            localStorage.setItem('diamonds', startingDiamonds); // Initialize diamond balance
+            localStorage.setItem('crypto', JSON.stringify({})); // Initialize crypto balance
+            alert('Account created successfully!');
+            $('#signup-form').hide();
+            $('#login-form').show();
+        } else {
+            alert('Please fill in both username and password.');
+        }
+    });
 
-            // Check if user is logged in when the page loads
-            if(localStorage.getItem('username')) {
-                $('#user-info').text('Logged in as ' + localStorage.getItem('username'));
-                $('#logout-btn').show();
-                $('#login-btn').hide();
-                updateDiamondBalance();
-                updateCryptoBalance();
-            }
+    // Handle logout functionality
+    $('#logout-btn').click(function() {
+        localStorage.removeItem('username');
+        localStorage.removeItem('password');
+        $('#user-info').text('Not logged in');
+        $('#logout-btn').hide();
+        $('#login-btn').show();
+        $('#diamond-balance').text('Diamonds: 0');
+        $('#crypto-balance').text('Crypto: LennonMartCoin 0, LennonGoodsCoin 0, MemeStationCoin 0, MemesmithCoin 0, MemesCarRentalsCoin 0, MemeHospitalCoin 0');
+    });
 
-            // Toggle Sign Up form
-            $('#signup-btn').click(function() {
-                $('#signup-form').toggle();
-                $('#login-form').hide(); // Hide Login form if it's visible
-            });
+    // Function to update diamond balance in the UI
+    function updateDiamondBalance() {
+        var diamonds = localStorage.getItem('diamonds') || 0;
+        $('#diamond-balance').text('Diamonds: ' + diamonds);
+    }
 
-            // Toggle Login form
-            $('#login-btn').click(function() {
-                $('#login-form').toggle();
-                $('#signup-form').hide(); // Hide Sign Up form if it's visible
-            });
+    // Function to update crypto balance in the UI
+    function updateCryptoBalance() {
+        var crypto = JSON.parse(localStorage.getItem('crypto')) || {};
+        var cryptoText = 'Crypto: ';
+        for (var key in crypto) {
+            cryptoText += key + ' ' + crypto[key] + ', ';
+        }
+        $('#crypto-balance').text(cryptoText.slice(0, -2)); // Remove the last comma and space
+    }
 
-            // Handle login form submission
-            $('#login-form-element').submit(function(e) {
-                e.preventDefault();
-                var username = $('#login-username').val();
-                var password = $('#login-password').val();
-
-                var storedUsername = localStorage.getItem('username');
-                var storedPassword = localStorage.getItem('password');
-
-                // Check if the username and password match
-                if (username === storedUsername && password === storedPassword) {
-                    // Successfully logged in
-                    $('#user-info').text('Logged in as ' + username);
-                    $('#login-form').hide();
-                    $('#logout-btn').show();
-                    $('#login-btn').hide();
-                } else {
-                    alert('Invalid username or password.');
-                }
-            });
-
-            // Handle sign-up form submission
-            $('#signup-form-element').submit(function(e) {
-                e.preventDefault();
-                var username = $('#signup-username').val();
-                var password = $('#signup-password').val();
-
-                // Check if username already exists
-                if (localStorage.getItem('username')) {
-                    alert('Account already exists. Please log in.');
-                    return;
-                }
-
-                if (username && password) {
-                    // Store the username and password in localStorage
-                    localStorage.setItem('username', username);
-                    localStorage.setItem('password', password);
-                    alert('Account created successfully!');
-                    $('#signup-form').hide();
-                    $('#login-form').show();
-                } else {
-                    alert('Please fill in both username and password.');
-                }
-            });
-
-            // Handle logout functionality
+    // Function to earn diamonds over time
+    setInterval(function() {
+        if (localStorage.getItem('username')) {
+            var diamonds = parseInt(localStorage.getItem('diamonds')) || 0;
+            diamonds += earningRate;
+            localStorage.setItem('diamonds', diamonds);
+            updateDiamondBalance();
+        }
+    }, earningInterval);
+});
