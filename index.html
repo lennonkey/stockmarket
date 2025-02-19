@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Business Stock Market</h1>
+        <button id="login-btn" class="btn">Login / Sign Up</button>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#transactions">Transactions</a></li>
+            <li><a href="#leaderboard">Leaderboard</a></li>
+            <li><a href="#account">Account</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <section id="market" class="card">
+            <h2>Available Stocks</h2>
+            <ul id="stock-list">
+                <li>LennonMart - <span class="price">100 Diamonds</span> <button class="buy-btn">Buy</button></li>
+                <li>Lennon Goods and Services - <span class="price">200 Diamonds</span> <button class="buy-btn">Buy</button></li>
+                <li>Meme Station - <span class="price">150 Emeralds</span> <button class="buy-btn">Buy</button></li>
+                <li>Memesmith - <span class="price">250 Emeralds</span> <button class="buy-btn">Buy</button></li>
+                <li>Meme's Car Rentals - <span class="price">300 Diamonds</span> <button class="buy-btn">Buy</button></li>
+                <li>Meme Hospital - <span class="price">500 Emeralds</span> <button class="buy-btn">Buy</button></li>
+            </ul>
+        </section>
+        
+        <section id="portfolio" class="card">
+            <h2>Your Portfolio</h2>
+            <ul id="portfolio-list">
+                <li>No stocks purchased yet.</li>
+            </ul>
+        </section>
+        
+        <section id="transactions" class="card">
+            <h2>Transaction History</h2>
+            <ul id="transaction-list">
+                <li>No transactions recorded yet.</li>
+            </ul>
+        </section>
+        
+        <section id="leaderboard" class="card">
+            <h2>Top Investors</h2>
+            <ul id="leaderboard-list">
+                <li>No data available yet.</li>
+            </ul>
+        </section>
+        
+        <section id="account" class="card">
+            <h2>Account Information</h2>
+            <p id="user-info">Not logged in</p>
+            <button id="logout-btn" class="btn" style="display: none;">Logout</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Business Stock Market. All rights reserved.</p>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
