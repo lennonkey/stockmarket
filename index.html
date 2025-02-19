@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Stock Market</title>
+    <title>Business Stock Market with Crypto</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <header>
-        <h1>Business Stock Market</h1>
+        <h1>Business Stock Market with Crypto</h1>
         <button id="login-btn" class="btn">Login</button>
         <button id="signup-btn" class="btn">Sign Up</button>
     </header>
@@ -19,6 +19,7 @@
             <li><a href="#market">Market</a></li>
             <li><a href="#portfolio">Portfolio</a></li>
             <li><a href="#account">Account</a></li>
+            <li><a href="#crypto">Crypto</a></li>
         </ul>
     </nav>
 
@@ -64,6 +65,15 @@
             </ul>
         </section>
 
+        <!-- Crypto Section -->
+        <section id="crypto" class="card">
+            <h2>Cryptocurrency</h2>
+            <ul id="crypto-list">
+                <li data-crypto="Bitcoin" class="crypto-item">Bitcoin - 1 BTC = 100 Diamonds <button class="buy-crypto-btn">Buy</button></li>
+                <li data-crypto="Ethereum" class="crypto-item">Ethereum - 1 ETH = 150 Diamonds <button class="buy-crypto-btn">Buy</button></li>
+            </ul>
+        </section>
+
         <!-- Portfolio Section -->
         <section id="portfolio" class="card">
             <h2>Your Portfolio</h2>
@@ -77,12 +87,13 @@
             <h2>Account Information</h2>
             <p id="user-info">Not logged in</p>
             <p id="diamond-balance">Diamonds: 0</p>
+            <p id="crypto-balance">Crypto: Bitcoin 0, Ethereum 0</p>
             <button id="logout-btn" class="btn" style="display: none;">Logout</button>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 Business Stock Market. All rights reserved.</p>
+        <p>&copy; 2025 Business Stock Market with Crypto. All rights reserved.</p>
     </footer>
 
     <script>
@@ -140,9 +151,20 @@
             // Track user money (Diamonds)
             var userMoney = startingDiamonds;
 
+            // Track user crypto holdings
+            var cryptoPortfolio = {
+                'Bitcoin': 0,
+                'Ethereum': 0
+            };
+
             // Update diamond balance display
             function updateDiamondBalance() {
                 $('#diamond-balance').text('Diamonds: ' + userMoney);
+            }
+
+            // Update crypto balance display
+            function updateCryptoBalance() {
+                $('#crypto-balance').text('Crypto: Bitcoin ' + cryptoPortfolio['Bitcoin'] + ', Ethereum ' + cryptoPortfolio['Ethereum']);
             }
 
             // Earn diamonds over time
@@ -150,23 +172,6 @@
                 userMoney += earningRate;
                 updateDiamondBalance();
             }, earningInterval);
-
-            // Load portfolio from localStorage or initialize if not available
-            var portfolio = JSON.parse(localStorage.getItem('portfolio')) || {};
-
-            // Update the portfolio display
-            function updatePortfolio() {
-                var portfolioList = $('#portfolio-list');
-                portfolioList.empty();
-
-                if (Object.keys(portfolio).length === 0) {
-                    portfolioList.append('<li>No stocks purchased yet.</li>');
-                } else {
-                    for (var stock in portfolio) {
-                        portfolioList.append('<li>' + stock + ' - ' + portfolio[stock].shares + ' shares <button class="sell-btn">Sell</button></li>');
-                    }
-                }
-            }
 
             // Handle stock purchases
             var stockData = {
@@ -178,22 +183,9 @@
                 'Meme Hospital': { price: 500, available: 100 }
             };
 
-            // Update stock availability and percentage
-            function updateStockDisplay() {
-                $('#stock-list .stock-item').each(function() {
-                    var stockName = $(this).data('stock');
-                    var stock = stockData[stockName];
-                    var purchased = 100 - stock.available;
-                    var percentage = purchased + '%';
-                    $(this).find('.percentage').text(percentage);
-                    
-                    if (stock.available === 0) {
-                        $(this).find('.buy-btn').prop('disabled', true).text('Sold Out');
-                    } else {
-                        $(this).find('.buy-btn').prop('disabled', false).text('Buy');
-                    }
-                });
-            }
-
             $('#stock-list .buy-btn').click(function() {
-                var stock
+                var stockItem = $(this).closest('.stock-item');
+                var stockName = stockItem.data('stock');
+                var stock = stockData[stockName];
+
+                // Check if user has enough diamonds
