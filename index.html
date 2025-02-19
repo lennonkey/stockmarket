@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Market</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
@@ -15,12 +14,6 @@
     </header>
     
     <main>
-        <!-- Stock Chart Section -->
-        <section id="chart-section" class="card">
-            <h2>Stock Price Chart</h2>
-            <canvas id="stockChart"></canvas>
-        </section>
-
         <!-- Market Section -->
         <section id="market" class="card">
             <h2>Available Stocks</h2>
@@ -58,43 +51,7 @@
 
     <script>
         $(document).ready(function() {
-            // Chart.js data and config
-            const ctx = document.getElementById('stockChart').getContext('2d');
-            const stockData = {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                datasets: [{
-                    label: 'LennonMart Stock Price',
-                    data: [100, 120, 140, 130, 150, 160, 170],
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
-                    fill: false
-                },
-                {
-                    label: 'Meme Station Stock Price',
-                    data: [150, 160, 180, 170, 200, 210, 220],
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                    fill: false
-                }]
-            };
-            const config = {
-                type: 'line',
-                data: stockData,
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            beginAtZero: true
-                        },
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            };
-            const stockChart = new Chart(ctx, config);
-
-            // Simulate buying stock and updating the chart
+            // Simulate buying stock and updating prices
             $('.buy-btn').click(function() {
                 const stock = $(this).data('stock');
                 alert('You bought stock in ' + stock);
@@ -102,18 +59,14 @@
                 // Simulate stock price change by adding or subtracting a random value
                 const randomChange = Math.floor(Math.random() * 21) - 10; // Random change between -10 and +10
 
+                // Update the stock price on the page
                 if (stock === 'LennonMart') {
-                    // Add or subtract the random change to LennonMart stock price
-                    stockData.datasets[0].data.push(stockData.datasets[0].data[stockData.datasets[0].data.length - 1] + randomChange);
-                    stockData.labels.push('Aug'); // Add new label for the new month
+                    const currentPrice = parseInt($(this).siblings('.price').text());
+                    $(this).siblings('.price').text((currentPrice + randomChange) + ' Diamonds');
                 } else if (stock === 'Meme Station') {
-                    // Add or subtract the random change to Meme Station stock price
-                    stockData.datasets[1].data.push(stockData.datasets[1].data[stockData.datasets[1].data.length - 1] + randomChange);
-                    stockData.labels.push('Aug'); // Add new label for the new month
+                    const currentPrice = parseInt($(this).siblings('.price').text());
+                    $(this).siblings('.price').text((currentPrice + randomChange) + ' Emeralds');
                 }
-
-                // Update the chart with the new data
-                stockChart.update();
 
                 // Update portfolio
                 $('#portfolio-list').append('<li>' + stock + ' - 1 share</li>');
