@@ -133,17 +133,19 @@
         $(document).ready(function() {
             let userCurrency = 1000;  // Starting currency (diamonds or emeralds)
             let portfolio = JSON.parse(localStorage.getItem('portfolio')) || {};
-            
+            let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+
             // Check if user is logged in when the page loads
             if(localStorage.getItem('username')) {
                 $('#user-info').text('Logged in as ' + localStorage.getItem('username'));
                 $('#logout-btn').show();
                 $('#login-btn').hide();
             }
-            
+
             // Update portfolio list
             updatePortfolioList(portfolio);
-            
+            updateLeaderboard(leaderboard);
+
             // Toggle Sign Up form
             $('#signup-btn').click(function() {
                 $('#signup-form').toggle();
@@ -204,7 +206,12 @@
                     }
                     portfolio[stockName] += quantity;
 
-                    // Save portfolio and user currency to localStorage
+                    // Update leaderboard
+                    updateLeaderboardData(stockName, quantity);
+
+                    // Save portfolio and leaderboard to localStorage
                     localStorage.setItem('portfolio', JSON.stringify(portfolio));
                     updatePortfolioList(portfolio);
-                    // Update
+                    updateLeaderboard(leaderboard);
+                } else {
+                    alert('You don\'t have enough funds
