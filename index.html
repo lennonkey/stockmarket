@@ -55,12 +55,12 @@
         <section id="market" class="card">
             <h2>Available Stocks</h2>
             <ul id="stock-list">
-                <li>LennonMart - <span class="price">100 Diamonds</span> <button class="buy-btn">Buy</button></li>
-                <li>Lennon Goods and Services - <span class="price">200 Diamonds</span> <button class="buy-btn">Buy</button></li>
-                <li>Meme Station - <span class="price">150 Emeralds</span> <button class="buy-btn">Buy</button></li>
-                <li>Memesmith - <span class="price">250 Emeralds</span> <button class="buy-btn">Buy</button></li>
-                <li>Meme's Car Rentals - <span class="price">300 Diamonds</span> <button class="buy-btn">Buy</button></li>
-                <li>Meme Hospital - <span class="price">500 Emeralds</span> <button class="buy-btn">Buy</button></li>
+                <li data-stock="LennonMart" class="stock-item">LennonMart - <span class="price">100 Diamonds</span> - <span class="quantity">5</span> available <button class="buy-btn">Buy</button></li>
+                <li data-stock="Lennon Goods and Services" class="stock-item">Lennon Goods and Services - <span class="price">200 Diamonds</span> - <span class="quantity">5</span> available <button class="buy-btn">Buy</button></li>
+                <li data-stock="Meme Station" class="stock-item">Meme Station - <span class="price">150 Emeralds</span> - <span class="quantity">5</span> available <button class="buy-btn">Buy</button></li>
+                <li data-stock="Memesmith" class="stock-item">Memesmith - <span class="price">250 Emeralds</span> - <span class="quantity">5</span> available <button class="buy-btn">Buy</button></li>
+                <li data-stock="Meme's Car Rentals" class="stock-item">Meme's Car Rentals - <span class="price">300 Diamonds</span> - <span class="quantity">5</span> available <button class="buy-btn">Buy</button></li>
+                <li data-stock="Meme Hospital" class="stock-item">Meme Hospital - <span class="price">500 Emeralds</span> - <span class="quantity">5</span> available <button class="buy-btn">Buy</button></li>
             </ul>
         </section>
 
@@ -137,9 +137,12 @@
             var portfolio = {};
 
             $('#stock-list .buy-btn').click(function() {
-                var stockName = $(this).parent().text().split(" - ")[0];
-                var price = $(this).siblings('.price').text();
+                var stockItem = $(this).closest('.stock-item');
+                var stockName = stockItem.data('stock');
+                var price = stockItem.find('.price').text();
                 var priceAmount = parseInt(price.split(" ")[0]);
+                var quantityElement = stockItem.find('.quantity');
+                var quantity = parseInt(quantityElement.text());
 
                 // Check if user is logged in
                 if (!localStorage.getItem('username')) {
@@ -147,14 +150,22 @@
                     return;
                 }
 
-                // Add stock to portfolio
-                if (!portfolio[stockName]) {
-                    portfolio[stockName] = { name: stockName, shares: 0, price: priceAmount };
-                }
-                portfolio[stockName].shares++;
+                // Check if there are available stocks
+                if (quantity > 0) {
+                    // Add stock to portfolio
+                    if (!portfolio[stockName]) {
+                        portfolio[stockName] = { name: stockName, shares: 0, price: priceAmount };
+                    }
+                    portfolio[stockName].shares++;
 
-                // Update portfolio display
-                updatePortfolio();
+                    // Update stock availability
+                    quantityElement.text(quantity - 1);
+
+                    // Update portfolio display
+                    updatePortfolio();
+                } else {
+                    alert('No available stock to buy.');
+                }
             });
 
             // Update portfolio list
