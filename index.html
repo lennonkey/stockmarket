@@ -131,6 +131,7 @@
                 var storedUsername = localStorage.getItem('username');
                 var storedPassword = localStorage.getItem('password');
 
+                // Check if the username and password match
                 if (username === storedUsername && password === storedPassword) {
                     // Successfully logged in
                     $('#user-info').text('Logged in as ' + username);
@@ -147,6 +148,12 @@
                 e.preventDefault();
                 var username = $('#signup-username').val();
                 var password = $('#signup-password').val();
+
+                // Check if username already exists
+                if (localStorage.getItem('username')) {
+                    alert('Account already exists. Please log in.');
+                    return;
+                }
 
                 if (username && password) {
                     // Store the username and password in localStorage
@@ -197,4 +204,4 @@
             // Handle stock and crypto purchases
             var stockData = {
                 'LennonMart': { price: 100, available: 100 },
-                'Lennon Goods and Services
+                'Lennon Goods and Services': { price: 
