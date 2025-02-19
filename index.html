@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Market</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
@@ -15,203 +14,128 @@
         <button id="signup-btn" class="btn">Sign Up</button>
     </header>
     
-    <nav>
-        <ul>
-            <li><a href="#market">Market</a></li>
-            <li><a href="#portfolio">Portfolio</a></li>
-            <li><a href="#transactions">Transactions</a></li>
-            <li><a href="#leaderboard">Leaderboard</a></li>
-            <li><a href="#account">Account</a></li>
-        </ul>
-    </nav>
-    
     <main>
-        <!-- Sign Up Form -->
-        <section id="signup-form" class="card" style="display: none;">
-            <h2>Sign Up</h2>
-            <form id="signup-form-element">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-                
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                
-                <label for="confirm-password">Confirm Password:</label>
-                <input type="password" id="confirm-password" name="confirm-password" required>
-                
-                <button type="submit" class="btn">Create Account</button>
-            </form>
-        </section>
-
-        <!-- Login Form -->
-        <section id="login-form" class="card" style="display: none;">
-            <h2>Login</h2>
-            <form id="login-form-element">
-                <label for="login-username">Username:</label>
-                <input type="text" id="login-username" name="login-username" required>
-                
-                <label for="login-password">Password:</label>
-                <input type="password" id="login-password" name="login-password" required>
-                
-                <button type="submit" class="btn">Login</button>
-            </form>
-        </section>
-
         <!-- Stock Chart Section -->
-        <section id="stock-chart" class="card">
+        <section id="chart-section" class="card">
             <h2>Stock Price Chart</h2>
-            <canvas id="myChart" width="400" height="200"></canvas>
+            <canvas id="stockChart"></canvas>
         </section>
 
         <!-- Market Section -->
         <section id="market" class="card">
             <h2>Available Stocks</h2>
             <ul id="stock-list">
-                <li>LennonMart - <span class="price">100 Diamonds</span> <button class="buy-btn">Buy</button></li>
-                <li>Lennon Goods and Services - <span class="price">200 Diamonds</span> <button class="buy-btn">Buy</button></li>
-                <li>Meme Station - <span class="price">150 Emeralds</span> <button class="buy-btn">Buy</button></li>
-                <li>Memesmith - <span class="price">250 Emeralds</span> <button class="buy-btn">Buy</button></li>
-                <li>Meme's Car Rentals - <span class="price">300 Diamonds</span> <button class="buy-btn">Buy</button></li>
-                <li>Meme Hospital - <span class="price">500 Emeralds</span> <button class="buy-btn">Buy</button></li>
+                <li>LennonMart - <span class="price">100 Diamonds</span> <button class="buy-btn" data-stock="LennonMart">Buy</button></li>
+                <li>Lennon Goods and Services - <span class="price">200 Diamonds</span> <button class="buy-btn" data-stock="Lennon Goods and Services">Buy</button></li>
+                <li>Meme Station - <span class="price">150 Emeralds</span> <button class="buy-btn" data-stock="Meme Station">Buy</button></li>
+                <li>Memesmith - <span class="price">250 Emeralds</span> <button class="buy-btn" data-stock="Memesmith">Buy</button></li>
             </ul>
         </section>
 
-        <!-- Portfolio Section -->
         <section id="portfolio" class="card">
             <h2>Your Portfolio</h2>
             <ul id="portfolio-list">
                 <li>No stocks purchased yet.</li>
             </ul>
         </section>
-
-        <!-- Account Information Section -->
-        <section id="account" class="card">
-            <h2>Account Information</h2>
-            <p id="user-info">Not logged in</p>
-            <button id="logout-btn" class="btn" style="display: none;">Logout</button>
+        
+        <!-- Login Form -->
+        <section id="login-form" class="card" style="display: none;">
+            <h2>Login</h2>
+            <form id="login-form-element">
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" name="login-username" required>
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" name="login-password" required>
+                <button type="submit" class="btn">Login</button>
+            </form>
         </section>
     </main>
 
     <footer>
         <p>&copy; 2025 Business Stock Market. All rights reserved.</p>
     </footer>
-    
+
     <script>
         $(document).ready(function() {
-            // Check if user is logged in when the page loads
-            if(localStorage.getItem('username')) {
-                $('#user-info').text('Logged in as ' + localStorage.getItem('username'));
-                $('#logout-btn').show();
-                $('#login-btn').hide();
-            }
-
-            // Toggle Sign Up form
-            $('#signup-btn').click(function() {
-                $('#signup-form').toggle();
-                $('#login-form').hide(); // Hide Login form if it's visible
-            });
-
-            // Toggle Login form
-            $('#login-btn').click(function() {
-                $('#login-form').toggle();
-                $('#signup-form').hide(); // Hide Sign Up form if it's visible
-            });
-
-            // Handle login form submission
-            $('#login-form-element').submit(function(e) {
-                e.preventDefault();
-                var username = $('#login-username').val();
-                var password = $('#login-password').val();
-
-                // Simulate checking credentials (you would check against a database in a real app)
-                if (username && password) {
-                    // Store the username in localStorage
-                    localStorage.setItem('username', username);
-
-                    $('#user-info').text('Logged in as ' + username);
-                    $('#login-form').hide();
-                    $('#logout-btn').show();
-                    $('#login-btn').hide();
-                } else {
-                    alert('Please enter both username and password.');
-                }
-            });
-
-            // Handle logout functionality
-            $('#logout-btn').click(function() {
-                localStorage.removeItem('username'); // Remove from localStorage
-                $('#user-info').text('Not logged in');
-                $('#logout-btn').hide();
-                $('#login-btn').show();
-            });
-
-            // Handle stock purchases
-            var portfolio = {};
-
-            $('#stock-list .buy-btn').click(function() {
-                var stockName = $(this).parent().text().split(" - ")[0];
-                var price = $(this).siblings('.price').text();
-                var priceAmount = parseInt(price.split(" ")[0]);
-
-                // Check if user is logged in
-                if (!localStorage.getItem('username')) {
-                    alert('Please log in to buy stocks.');
-                    return;
-                }
-
-                // Add stock to portfolio
-                if (!portfolio[stockName]) {
-                    portfolio[stockName] = { name: stockName, shares: 0, price: priceAmount };
-                }
-                portfolio[stockName].shares++;
-
-                // Update portfolio display
-                updatePortfolio();
-            });
-
-            // Update portfolio list
-            function updatePortfolio() {
-                var portfolioList = $('#portfolio-list');
-                portfolioList.empty();
-                for (var stock in portfolio) {
-                    portfolioList.append('<li>' + portfolio[stock].name + ' - ' + portfolio[stock].shares + ' shares</li>');
-                }
-                if (Object.keys(portfolio).length === 0) {
-                    portfolioList.append('<li>No stocks purchased yet.</li>');
-                }
-            }
-
-            // Stock chart data (example)
-            const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-            const data = {
-                labels: labels,
+            // Chart.js data and config
+            const ctx = document.getElementById('stockChart').getContext('2d');
+            const stockData = {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
                 datasets: [{
-                    label: 'Stock Price ($)',
-                    data: [65, 59, 80, 81, 56, 55, 40],  // Stock price values
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    fill: true,
+                    label: 'LennonMart Stock Price',
+                    data: [100, 120, 140, 130, 150, 160, 170],
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    fill: false
+                },
+                {
+                    label: 'Meme Station Stock Price',
+                    data: [150, 160, 180, 170, 200, 210, 220],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    fill: false
                 }]
             };
-
-            // Chart configuration
             const config = {
-                type: 'line',  // You can use 'line', 'bar', 'candlestick', etc.
-                data: data,
+                type: 'line',
+                data: stockData,
                 options: {
+                    responsive: true,
                     scales: {
+                        x: {
+                            beginAtZero: true
+                        },
                         y: {
                             beginAtZero: true
                         }
                     }
                 }
             };
+            const stockChart = new Chart(ctx, config);
 
-            // Render the chart
-            const myChart = new Chart(
-                document.getElementById('myChart'),
-                config
-            );
+            // Simulate buying stock and updating the chart
+            $('.buy-btn').click(function() {
+                const stock = $(this).data('stock');
+                alert('You bought stock in ' + stock);
+
+                // Simulate stock price change by adding or subtracting a random value
+                const randomChange = Math.floor(Math.random() * 21) - 10; // Random change between -10 and +10
+
+                if (stock === 'LennonMart') {
+                    // Add or subtract the random change to LennonMart stock price
+                    stockData.datasets[0].data.push(stockData.datasets[0].data[stockData.datasets[0].data.length - 1] + randomChange);
+                    stockData.labels.push('Aug'); // Add new label for the new month
+                } else if (stock === 'Meme Station') {
+                    // Add or subtract the random change to Meme Station stock price
+                    stockData.datasets[1].data.push(stockData.datasets[1].data[stockData.datasets[1].data.length - 1] + randomChange);
+                    stockData.labels.push('Aug'); // Add new label for the new month
+                }
+
+                // Update the chart with the new data
+                stockChart.update();
+
+                // Update portfolio
+                $('#portfolio-list').append('<li>' + stock + ' - 1 share</li>');
+            });
+
+            // Check login status on page load
+            if(localStorage.getItem('username')) {
+                $('#user-info').text('Logged in as ' + localStorage.getItem('username'));
+            }
+
+            // Login form handling
+            $('#login-form-element').submit(function(e) {
+                e.preventDefault();
+                const username = $('#login-username').val();
+                const password = $('#login-password').val();
+                if (localStorage.getItem(username) && localStorage.getItem(username) === password) {
+                    localStorage.setItem('username', username);
+                    alert('Login successful!');
+                } else {
+                    alert('Invalid login credentials!');
+                }
+            });
         });
     </script>
 </body>
