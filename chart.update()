@@ -1,0 +1,5 @@
+// Example of updating the chart's data dynamically after buying stock
+chartData.datasets[0].data.push(200); // Add a new stock price to the data
+chartData.labels.push('Jun'); // Add a new month to the X-axis labels
+
+chart.update(); // Re-render the chart with the new data
