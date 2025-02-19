@@ -69,8 +69,12 @@
         <section id="crypto" class="card">
             <h2>Cryptocurrency</h2>
             <ul id="crypto-list">
-                <li data-crypto="Bitcoin" class="crypto-item">Bitcoin - 1 BTC = 100 Diamonds <button class="buy-crypto-btn">Buy</button></li>
-                <li data-crypto="Ethereum" class="crypto-item">Ethereum - 1 ETH = 150 Diamonds <button class="buy-crypto-btn">Buy</button></li>
+                <li data-crypto="LennonMartCoin" class="crypto-item">LennonMartCoin - 1 LennonMartCoin = 100 Diamonds <button class="buy-crypto-btn">Buy</button></li>
+                <li data-crypto="LennonGoodsCoin" class="crypto-item">LennonGoodsCoin - 1 LennonGoodsCoin = 150 Diamonds <button class="buy-crypto-btn">Buy</button></li>
+                <li data-crypto="MemeStationCoin" class="crypto-item">MemeStationCoin - 1 MemeStationCoin = 200 Diamonds <button class="buy-crypto-btn">Buy</button></li>
+                <li data-crypto="MemesmithCoin" class="crypto-item">MemesmithCoin - 1 MemesmithCoin = 250 Diamonds <button class="buy-crypto-btn">Buy</button></li>
+                <li data-crypto="MemesCarRentalsCoin" class="crypto-item">MemesCarRentalsCoin - 1 MemesCarRentalsCoin = 300 Diamonds <button class="buy-crypto-btn">Buy</button></li>
+                <li data-crypto="MemeHospitalCoin" class="crypto-item">MemeHospitalCoin - 1 MemeHospitalCoin = 500 Diamonds <button class="buy-crypto-btn">Buy</button></li>
             </ul>
         </section>
 
@@ -87,7 +91,7 @@
             <h2>Account Information</h2>
             <p id="user-info">Not logged in</p>
             <p id="diamond-balance">Diamonds: 0</p>
-            <p id="crypto-balance">Crypto: Bitcoin 0, Ethereum 0</p>
+            <p id="crypto-balance">Crypto: LennonMartCoin 0, LennonGoodsCoin 0, MemeStationCoin 0, MemesmithCoin 0, MemesCarRentalsCoin 0, MemeHospitalCoin 0</p>
             <button id="logout-btn" class="btn" style="display: none;">Logout</button>
         </section>
     </main>
@@ -169,39 +173,4 @@
 
             // Handle logout functionality
             $('#logout-btn').click(function() {
-                localStorage.removeItem('username');
-                localStorage.removeItem('password');
-                $('#user-info').text('Not logged in');
-                $('#logout-btn').hide();
-                $('#login-btn').show();
-            });
-
-            // Track user money (Diamonds)
-            var userMoney = startingDiamonds;
-
-            // Track user crypto holdings
-            var cryptoPortfolio = {
-                'Bitcoin': 0,
-                'Ethereum': 0
-            };
-
-            // Update diamond balance display
-            function updateDiamondBalance() {
-                $('#diamond-balance').text('Diamonds: ' + userMoney);
-            }
-
-            // Update crypto balance display
-            function updateCryptoBalance() {
-                $('#crypto-balance').text('Crypto: Bitcoin ' + cryptoPortfolio['Bitcoin'] + ', Ethereum ' + cryptoPortfolio['Ethereum']);
-            }
-
-            // Earn diamonds over time
-            setInterval(function() {
-                userMoney += earningRate;
-                updateDiamondBalance();
-            }, earningInterval);
-
-            // Handle stock and crypto purchases
-            var stockData = {
-                'LennonMart': { price: 100, available: 100 },
-                'Lennon Goods and Services': { price: 
+                localStorage.removeItem
