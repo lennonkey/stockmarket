@@ -28,11 +28,11 @@
         <section id="signup-form" class="card" style="display: none;">
             <h2>Sign Up</h2>
             <form id="signup-form-element">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="signup-username">Username:</label>
+                <input type="text" id="signup-username" name="signup-username" required>
                 
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <label for="signup-password">Password:</label>
+                <input type="password" id="signup-password" name="signup-password" required>
                 
                 <button type="submit" class="btn">Create Account</button>
             </form>
@@ -128,21 +128,42 @@
                 var username = $('#login-username').val();
                 var password = $('#login-password').val();
 
-                if (username && password) {
-                    // Store the username in localStorage
-                    localStorage.setItem('username', username);
+                var storedUsername = localStorage.getItem('username');
+                var storedPassword = localStorage.getItem('password');
+
+                if (username === storedUsername && password === storedPassword) {
+                    // Successfully logged in
                     $('#user-info').text('Logged in as ' + username);
                     $('#login-form').hide();
                     $('#logout-btn').show();
                     $('#login-btn').hide();
                 } else {
-                    alert('Please enter both username and password.');
+                    alert('Invalid username or password.');
+                }
+            });
+
+            // Handle sign-up form submission
+            $('#signup-form-element').submit(function(e) {
+                e.preventDefault();
+                var username = $('#signup-username').val();
+                var password = $('#signup-password').val();
+
+                if (username && password) {
+                    // Store the username and password in localStorage
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('password', password);
+                    alert('Account created successfully!');
+                    $('#signup-form').hide();
+                    $('#login-form').show();
+                } else {
+                    alert('Please fill in both username and password.');
                 }
             });
 
             // Handle logout functionality
             $('#logout-btn').click(function() {
                 localStorage.removeItem('username');
+                localStorage.removeItem('password');
                 $('#user-info').text('Not logged in');
                 $('#logout-btn').hide();
                 $('#login-btn').show();
@@ -173,19 +194,7 @@
                 updateDiamondBalance();
             }, earningInterval);
 
-            // Handle stock purchases
+            // Handle stock and crypto purchases
             var stockData = {
                 'LennonMart': { price: 100, available: 100 },
-                'Lennon Goods and Services': { price: 200, available: 100 },
-                'Meme Station': { price: 150, available: 100 },
-                'Memesmith': { price: 250, available: 100 },
-                'Meme\'s Car Rentals': { price: 300, available: 100 },
-                'Meme Hospital': { price: 500, available: 100 }
-            };
-
-            $('#stock-list .buy-btn').click(function() {
-                var stockItem = $(this).closest('.stock-item');
-                var stockName = stockItem.data('stock');
-                var stock = stockData[stockName];
-
-                // Check if user has enough diamonds
+                'Lennon Goods and Services
