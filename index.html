@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Market</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -25,6 +26,7 @@
             </ul>
         </section>
 
+        <!-- Portfolio Section -->
         <section id="portfolio" class="card">
             <h2>Your Portfolio</h2>
             <ul id="portfolio-list">
@@ -43,6 +45,20 @@
                 <button type="submit" class="btn">Login</button>
             </form>
         </section>
+
+        <!-- Sign Up Form -->
+        <section id="signup-form" class="card" style="display: none;">
+            <h2>Sign Up</h2>
+            <form id="signup-form-element">
+                <label for="signup-username">Username:</label>
+                <input type="text" id="signup-username" name="signup-username" required>
+                <label for="signup-password">Password:</label>
+                <input type="password" id="signup-password" name="signup-password" required>
+                <label for="signup-confirm-password">Confirm Password:</label>
+                <input type="password" id="signup-confirm-password" name="signup-confirm-password" required>
+                <button type="submit" class="btn">Create Account</button>
+            </form>
+        </section>
     </main>
 
     <footer>
@@ -51,6 +67,52 @@
 
     <script>
         $(document).ready(function() {
+            // Toggle between login and sign up forms
+            $('#signup-btn').click(function() {
+                $('#signup-form').toggle();
+                $('#login-form').hide(); 
+            });
+
+            $('#login-btn').click(function() {
+                $('#login-form').toggle();
+                $('#signup-form').hide();
+            });
+
+            // Handle login form submission
+            $('#login-form-element').submit(function(e) {
+                e.preventDefault();
+                var username = $('#login-username').val();
+                var password = $('#login-password').val();
+
+                if (localStorage.getItem(username) && localStorage.getItem(username) === password) {
+                    localStorage.setItem('username', username);
+                    alert('Login successful!');
+                    $('#login-form').hide();
+                    $('#signup-form').hide();
+                    $('#login-btn').hide();
+                    $('#signup-btn').hide();
+                } else {
+                    alert('Invalid login credentials!');
+                }
+            });
+
+            // Handle sign-up form submission
+            $('#signup-form-element').submit(function(e) {
+                e.preventDefault();
+                var username = $('#signup-username').val();
+                var password = $('#signup-password').val();
+                var confirmPassword = $('#signup-confirm-password').val();
+
+                if (password === confirmPassword) {
+                    localStorage.setItem(username, password);
+                    alert('Account created successfully!');
+                    $('#signup-form').hide();
+                    $('#login-form').show();
+                } else {
+                    alert('Passwords do not match!');
+                }
+            });
+
             // Simulate buying stock and updating prices
             $('.buy-btn').click(function() {
                 const stock = $(this).data('stock');
@@ -76,19 +138,6 @@
             if(localStorage.getItem('username')) {
                 $('#user-info').text('Logged in as ' + localStorage.getItem('username'));
             }
-
-            // Login form handling
-            $('#login-form-element').submit(function(e) {
-                e.preventDefault();
-                const username = $('#login-username').val();
-                const password = $('#login-password').val();
-                if (localStorage.getItem(username) && localStorage.getItem(username) === password) {
-                    localStorage.setItem('username', username);
-                    alert('Login successful!');
-                } else {
-                    alert('Invalid login credentials!');
-                }
-            });
         });
     </script>
 </body>
