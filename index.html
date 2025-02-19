@@ -1,121 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Stock Market</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <header>
-        <h1>Business Stock Market</h1>
-    </header>
+$(document).ready(function() {
+    // Starting balance and diamonds
+    var diamonds = 500; // Initial amount of diamonds
 
-    <nav>
-        <ul>
-            <li><a href="#market">Market</a></li>
-            <li><a href="#portfolio">Portfolio</a></li>
-            <li><a href="#transactions">Transactions</a></li>
-            <li><a href="#leaderboard">Leaderboard</a></li>
-            <li><a href="#account">Account</a></li>
-        </ul>
-    </nav>
+    // Update diamonds display
+    function updateDiamonds() {
+        $('#user-info').text('You have ' + diamonds + ' Diamonds.');
+    }
 
-    <main>
-        <!-- Stock Chart Section -->
-        <section id="stock-chart" class="card">
-            <h2>Stock Price Chart</h2>
-            <canvas id="myChart" width="400" height="200"></canvas>
-        </section>
+    // Stock purchase functionality
+    var portfolio = {};
 
-        <!-- Market Section -->
-        <section id="market" class="card">
-            <h2>Available Stocks</h2>
-            <ul id="stock-list">
-                <li>LennonMart - <span class="price">100 Diamonds</span> <button class="buy-btn">Buy</button></li>
-                <li>Lennon Goods and Services - <span class="price">200 Diamonds</span> <button class="buy-btn">Buy</button></li>
-                <li>Meme Station - <span class="price">150 Emeralds</span> <button class="buy-btn">Buy</button></li>
-                <li>Memesmith - <span class="price">250 Emeralds</span> <button class="buy-btn">Buy</button></li>
-                <li>Meme's Car Rentals - <span class="price">300 Diamonds</span> <button class="buy-btn">Buy</button></li>
-                <li>Meme Hospital - <span class="price">500 Emeralds</span> <button class="buy-btn">Buy</button></li>
-            </ul>
-        </section>
+    $('#stock-list .buy-btn').click(function() {
+        var stockName = $(this).parent().text().split(" - ")[0];
+        var price = $(this).siblings('.price').text();
+        var priceAmount = parseInt(price.split(" ")[0]);
 
-        <!-- Portfolio Section -->
-        <section id="portfolio" class="card">
-            <h2>Your Portfolio</h2>
-            <ul id="portfolio-list">
-                <li>No stocks purchased yet.</li>
-            </ul>
-        </section>
-
-        <!-- Account Information Section -->
-        <section id="account" class="card">
-            <h2>Account Information</h2>
-            <p id="user-info">You have 500 Diamonds.</p>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Business Stock Market. All rights reserved.</p>
-    </footer>
-
-    <script>
-        $(document).ready(function() {
-            // Starting balance and diamonds
-            var diamonds = 500; // Initial amount of diamonds
-
-            // Update diamonds display
-            function updateDiamonds() {
-                $('#user-info').text('You have ' + diamonds + ' Diamonds.');
+        // Check if the user has enough diamonds to purchase the stock
+        if (diamonds >= priceAmount) {
+            // Update portfolio
+            if (!portfolio[stockName]) {
+                portfolio[stockName] = { name: stockName, shares: 0, price: priceAmount };
             }
+            portfolio[stockName].shares++;
 
-            // Stock purchase functionality
-            var portfolio = {};
+            // Deduct diamonds from balance
+            diamonds -= priceAmount;
 
-            $('#stock-list .buy-btn').click(function() {
-                var stockName = $(this).parent().text().split(" - ")[0];
-                var price = $(this).siblings('.price').text();
-                var priceAmount = parseInt(price.split(" ")[0]);
+            // Update portfolio display
+            updatePortfolio();
 
-                // Check if the user has enough diamonds to purchase the stock
-                if (diamonds >= priceAmount) {
-                    // Update portfolio
-                    if (!portfolio[stockName]) {
-                        portfolio[stockName] = { name: stockName, shares: 0, price: priceAmount };
-                    }
-                    portfolio[stockName].shares++;
-
-                    // Deduct diamonds from balance
-                    diamonds -= priceAmount;
-
-                    // Update portfolio display
-                    updatePortfolio();
-
-                    // Update diamond balance display
-                    updateDiamonds();
-                } else {
-                    alert('Not enough diamonds to buy this stock.');
-                }
-            });
-
-            // Update portfolio list
-            function updatePortfolio() {
-                var portfolioList = $('#portfolio-list');
-                portfolioList.empty();
-                for (var stock in portfolio) {
-                    portfolioList.append('<li>' + portfolio[stock].name + ' - ' + portfolio[stock].shares + ' shares</li>');
-                }
-                if (Object.keys(portfolio).length === 0) {
-                    portfolioList.append('<li>No stocks purchased yet.</li>');
-                }
-            }
-
-            // Initialize the diamond balance on page load
+            // Update diamond balance display
             updateDiamonds();
-        });
-    </script>
-</body>
-</html>
+        } else {
+            alert('Not enough diamonds to buy this stock.');
+        }
+    });
+
+    // Update portfolio list
+    function updatePortfolio() {
+        var portfolioList = $('#portfolio-list');
+        portfolioList.empty();
+        for (var stock in portfolio) {
+            portfolioList.append('<li>' + portfolio[stock].name + ' - ' + portfolio[stock].shares + ' shares</li>');
+        }
+        if (Object.keys(portfolio).length === 0) {
+            portfolioList.append('<li>No stocks purchased yet.</li>');
+        }
+    }
+
+    // Initialize the diamond balance on page load
+    updateDiamonds();
+
+    // Earn 100 diamonds every minute
+    setInterval(function() {
+        diamonds += 100;
+        updateDiamonds();
+    }, 60000); // 60000 ms = 1 minute
+});
