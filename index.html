@@ -25,6 +25,7 @@
     </nav>
     
     <main>
+        <!-- Sign Up Form -->
         <section id="signup-form" class="card" style="display: none;">
             <h2>Sign Up</h2>
             <form id="signup-form-element">
@@ -40,7 +41,22 @@
                 <button type="submit" class="btn">Create Account</button>
             </form>
         </section>
+
+        <!-- Login Form -->
+        <section id="login-form" class="card" style="display: none;">
+            <h2>Login</h2>
+            <form id="login-form-element">
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" name="login-username" required>
+                
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" name="login-password" required>
+                
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </section>
         
+        <!-- Market Section -->
         <section id="market" class="card">
             <h2>Available Stocks</h2>
             <ul id="stock-list">
@@ -53,6 +69,7 @@
             </ul>
         </section>
         
+        <!-- Portfolio Section -->
         <section id="portfolio" class="card">
             <h2>Your Portfolio</h2>
             <ul id="portfolio-list">
@@ -60,6 +77,7 @@
             </ul>
         </section>
         
+        <!-- Transactions Section -->
         <section id="transactions" class="card">
             <h2>Transaction History</h2>
             <ul id="transaction-list">
@@ -67,6 +85,7 @@
             </ul>
         </section>
         
+        <!-- Leaderboard Section -->
         <section id="leaderboard" class="card">
             <h2>Top Investors</h2>
             <ul id="leaderboard-list">
@@ -74,6 +93,7 @@
             </ul>
         </section>
         
+        <!-- Account Information Section -->
         <section id="account" class="card">
             <h2>Account Information</h2>
             <p id="user-info">Not logged in</p>
@@ -87,8 +107,38 @@
     
     <script>
         $(document).ready(function() {
+            // Toggle Sign Up form
             $('#signup-btn').click(function() {
                 $('#signup-form').toggle();
+                $('#login-form').hide(); // Hide Login form if it's visible
+            });
+
+            // Toggle Login form
+            $('#login-btn').click(function() {
+                $('#login-form').toggle();
+                $('#signup-form').hide(); // Hide Sign Up form if it's visible
+            });
+
+            // Handle login form submission (simple demonstration)
+            $('#login-form-element').submit(function(e) {
+                e.preventDefault();
+                var username = $('#login-username').val();
+                var password = $('#login-password').val();
+
+                // Check if login is successful (this is just a basic check, modify as needed)
+                if (username && password) {
+                    $('#user-info').text('Logged in as ' + username);
+                    $('#login-form').hide();
+                    $('#logout-btn').show();
+                } else {
+                    alert('Please enter both username and password.');
+                }
+            });
+
+            // Handle logout functionality
+            $('#logout-btn').click(function() {
+                $('#user-info').text('Not logged in');
+                $('#logout-btn').hide();
             });
         });
     </script>
