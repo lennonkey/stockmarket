@@ -112,6 +112,8 @@
                 $('#user-info').text('Logged in as ' + localStorage.getItem('username'));
                 $('#logout-btn').show();
                 $('#login-btn').hide();
+                updateDiamondBalance();
+                updateCryptoBalance();
             }
 
             // Toggle Sign Up form
@@ -172,5 +174,3 @@
             });
 
             // Handle logout functionality
-            $('#logout-btn').click(function() {
-                localStorage.removeItem
