@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Market</title>
+    <title>Business Stock Market</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -13,16 +13,59 @@
         <button id="login-btn" class="btn">Login</button>
         <button id="signup-btn" class="btn">Sign Up</button>
     </header>
-    
+
+    <nav>
+        <ul>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#transactions">Transactions</a></li>
+            <li><a href="#leaderboard">Leaderboard</a></li>
+            <li><a href="#account">Account</a></li>
+        </ul>
+    </nav>
+
     <main>
+        <!-- Sign Up Form -->
+        <section id="signup-form" class="card" style="display: none;">
+            <h2>Sign Up</h2>
+            <form id="signup-form-element">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+                
+                <button type="submit" class="btn">Create Account</button>
+            </form>
+        </section>
+
+        <!-- Login Form -->
+        <section id="login-form" class="card" style="display: none;">
+            <h2>Login</h2>
+            <form id="login-form-element">
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" name="login-username" required>
+                
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" name="login-password" required>
+                
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </section>
+
         <!-- Market Section -->
         <section id="market" class="card">
             <h2>Available Stocks</h2>
             <ul id="stock-list">
-                <li>LennonMart - <span class="price">100 Diamonds</span> <button class="buy-btn" data-stock="LennonMart">Buy</button></li>
-                <li>Lennon Goods and Services - <span class="price">200 Diamonds</span> <button class="buy-btn" data-stock="Lennon Goods and Services">Buy</button></li>
-                <li>Meme Station - <span class="price">150 Emeralds</span> <button class="buy-btn" data-stock="Meme Station">Buy</button></li>
-                <li>Memesmith - <span class="price">250 Emeralds</span> <button class="buy-btn" data-stock="Memesmith">Buy</button></li>
+                <li>LennonMart - <span class="price">100 Diamonds</span> <button class="buy-btn">Buy</button></li>
+                <li>Lennon Goods and Services - <span class="price">200 Diamonds</span> <button class="buy-btn">Buy</button></li>
+                <li>Meme Station - <span class="price">150 Emeralds</span> <button class="buy-btn">Buy</button></li>
+                <li>Memesmith - <span class="price">250 Emeralds</span> <button class="buy-btn">Buy</button></li>
+                <li>Meme's Car Rentals - <span class="price">300 Diamonds</span> <button class="buy-btn">Buy</button></li>
+                <li>Meme Hospital - <span class="price">500 Emeralds</span> <button class="buy-btn">Buy</button></li>
             </ul>
         </section>
 
@@ -33,31 +76,12 @@
                 <li>No stocks purchased yet.</li>
             </ul>
         </section>
-        
-        <!-- Login Form -->
-        <section id="login-form" class="card" style="display: none;">
-            <h2>Login</h2>
-            <form id="login-form-element">
-                <label for="login-username">Username:</label>
-                <input type="text" id="login-username" name="login-username" required>
-                <label for="login-password">Password:</label>
-                <input type="password" id="login-password" name="login-password" required>
-                <button type="submit" class="btn">Login</button>
-            </form>
-        </section>
 
-        <!-- Sign Up Form -->
-        <section id="signup-form" class="card" style="display: none;">
-            <h2>Sign Up</h2>
-            <form id="signup-form-element">
-                <label for="signup-username">Username:</label>
-                <input type="text" id="signup-username" name="signup-username" required>
-                <label for="signup-password">Password:</label>
-                <input type="password" id="signup-password" name="signup-password" required>
-                <label for="signup-confirm-password">Confirm Password:</label>
-                <input type="password" id="signup-confirm-password" name="signup-confirm-password" required>
-                <button type="submit" class="btn">Create Account</button>
-            </form>
+        <!-- Account Information Section -->
+        <section id="account" class="card">
+            <h2>Account Information</h2>
+            <p id="user-info">Not logged in</p>
+            <button id="logout-btn" class="btn" style="display: none;">Logout</button>
         </section>
     </main>
 
@@ -67,15 +91,23 @@
 
     <script>
         $(document).ready(function() {
-            // Toggle between login and sign up forms
+            // Check if user is logged in when the page loads
+            if(localStorage.getItem('username')) {
+                $('#user-info').text('Logged in as ' + localStorage.getItem('username'));
+                $('#logout-btn').show();
+                $('#login-btn').hide();
+            }
+
+            // Toggle Sign Up form
             $('#signup-btn').click(function() {
                 $('#signup-form').toggle();
-                $('#login-form').hide(); 
+                $('#login-form').hide(); // Hide Login form if it's visible
             });
 
+            // Toggle Login form
             $('#login-btn').click(function() {
                 $('#login-form').toggle();
-                $('#signup-form').hide();
+                $('#signup-form').hide(); // Hide Sign Up form if it's visible
             });
 
             // Handle login form submission
@@ -84,59 +116,62 @@
                 var username = $('#login-username').val();
                 var password = $('#login-password').val();
 
-                if (localStorage.getItem(username) && localStorage.getItem(username) === password) {
+                // Simulate checking credentials (you would check against a database in a real app)
+                if (username && password) {
+                    // Store the username in localStorage
                     localStorage.setItem('username', username);
-                    alert('Login successful!');
+
+                    $('#user-info').text('Logged in as ' + username);
                     $('#login-form').hide();
-                    $('#signup-form').hide();
+                    $('#logout-btn').show();
                     $('#login-btn').hide();
-                    $('#signup-btn').hide();
                 } else {
-                    alert('Invalid login credentials!');
+                    alert('Please enter both username and password.');
                 }
             });
 
-            // Handle sign-up form submission
-            $('#signup-form-element').submit(function(e) {
-                e.preventDefault();
-                var username = $('#signup-username').val();
-                var password = $('#signup-password').val();
-                var confirmPassword = $('#signup-confirm-password').val();
-
-                if (password === confirmPassword) {
-                    localStorage.setItem(username, password);
-                    alert('Account created successfully!');
-                    $('#signup-form').hide();
-                    $('#login-form').show();
-                } else {
-                    alert('Passwords do not match!');
-                }
+            // Handle logout functionality
+            $('#logout-btn').click(function() {
+                localStorage.removeItem('username'); // Remove from localStorage
+                $('#user-info').text('Not logged in');
+                $('#logout-btn').hide();
+                $('#login-btn').show();
             });
 
-            // Simulate buying stock and updating prices
-            $('.buy-btn').click(function() {
-                const stock = $(this).data('stock');
-                alert('You bought stock in ' + stock);
+            // Handle stock purchases
+            var portfolio = {};
 
-                // Simulate stock price change by adding or subtracting a random value
-                const randomChange = Math.floor(Math.random() * 21) - 10; // Random change between -10 and +10
+            $('#stock-list .buy-btn').click(function() {
+                var stockName = $(this).parent().text().split(" - ")[0];
+                var price = $(this).siblings('.price').text();
+                var priceAmount = parseInt(price.split(" ")[0]);
 
-                // Update the stock price on the page
-                if (stock === 'LennonMart') {
-                    const currentPrice = parseInt($(this).siblings('.price').text());
-                    $(this).siblings('.price').text((currentPrice + randomChange) + ' Diamonds');
-                } else if (stock === 'Meme Station') {
-                    const currentPrice = parseInt($(this).siblings('.price').text());
-                    $(this).siblings('.price').text((currentPrice + randomChange) + ' Emeralds');
+                // Check if user is logged in
+                if (!localStorage.getItem('username')) {
+                    alert('Please log in to buy stocks.');
+                    return;
                 }
 
-                // Update portfolio
-                $('#portfolio-list').append('<li>' + stock + ' - 1 share</li>');
+                // Add stock to portfolio
+                if (!portfolio[stockName]) {
+                    portfolio[stockName] = { name: stockName, shares: 0, price: priceAmount };
+                }
+                portfolio[stockName].shares++;
+
+                // Update portfolio display
+                updatePortfolio();
             });
 
-            // Check login status on page load
-            if(localStorage.getItem('username')) {
-                $('#user-info').text('Logged in as ' + localStorage.getItem('username'));
+            // Update portfolio list
+            function updatePortfolio() {
+                var portfolioList = $('#portfolio-list');
+                portfolioList.empty();
+                for (var stock in portfolio) {
+                    portfolioList.append('<li>' + portfolio[stock].name + ' - ' + portfolio[stock].shares + ' shares</li>');
+                }
+                if (Object.keys(portfolio).length === 0) {
+                    portfolioList.append('<li>No stocks purchased yet.</li>');
+                }
             }
         });
     </script>
